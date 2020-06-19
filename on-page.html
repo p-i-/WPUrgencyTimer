@@ -1,17 +1,11 @@
 <script>
-function onTick(is_vis) {
-    console.log( is_vis );
-    jQuery('#foo-textbox').text( is_vis ? 'vis' : 'hid' ); // by class
+function onTimerStateUpdate( showTimer ) {
+    console.log( 'onTimerStateUpdate: showTimer = ' + showTimer );
 
-        //.attr( 'href', 'http://foo.com' );
-        
-    // jQuery(".cta-bronze a .elementor-button-text").html( text );
-    // jQuery(".cta-bronze a").attr( 'href', 'http://foo.com' );
-
+    jQuery('#foo-textbox h1').text( showTimer ? 'vis' : 'hid' );
 }
 
 window.addEventListener('DOMContentLoaded', function () {
-    window.piTimer.addTickFunc(onTick);
+    window.piTimer.onUpdate( onTimerStateUpdate );
 });
-
 </script>
