@@ -66,7 +66,7 @@ class PiTimer
         // widget.style.display = this.is_vis ? "block" : "none";
 
         let widget = $('clockdiv'); //document.getElementById("clockdiv"); // alt. can use: jQuery("#clockdiv")[0];
-        ////widget.css( 'display', this.is_vis ? 'block' : 'none' );
+        //widget.css( 'display', this.is_vis ? 'block' : 'none' );
 
         for (const f of this.tickfuncs)
             f(this.is_vis);
@@ -91,4 +91,3 @@ window.piTimer = new PiTimer();
 //     jQuery(".cta-bronze a").attr( 'href', 'http://foo.com' );
 //
 // }
-

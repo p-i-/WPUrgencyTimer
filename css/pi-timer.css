@@ -1,0 +1,51 @@
+/* LARGE */
+
+.urgency-timer {
+    font-family: 'Impact', Times, serif;
+}
+
+.ut-large {
+    padding: 0px 16px;
+}
+
+.ut-large > .ut-letters {
+    color: #aaa;
+    padding-top: 1px;
+    font-size: 20px;
+}
+
+.ut-large > .ut-h,  .ut-large > .ut-m {
+    color: #a00;
+    padding-top: 1px;
+    font-size: 30px;
+}
+
+.ut-large > .ut-s {
+    color: #f00;
+    padding-top: 1px;
+    font-size: 30px;
+}
+
+/* SMALL */
+
+.ut-small {
+    padding: 0px 4px;
+}
+
+.ut-small > .ut-letters {
+    color: #0aa;
+    padding-top: 1px;
+    font-size: 20px;
+}
+
+.ut-small > .ut-h,  .ut-small > .ut-m {
+    color: #0a0;
+    padding-top: 1px;
+    font-size: 20px;
+}
+
+.ut-small > .ut-s {
+    color: #0f0;
+    padding-top: 1px;
+    font-size: 20px;
+}
