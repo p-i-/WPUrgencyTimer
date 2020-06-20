@@ -36,16 +36,18 @@ class TimerPlugin
         wp_enqueue_script(
           'pi-timer',
           plugins_url('/js/pi-timer.js', __FILE__),
-          array('jquery')
+          array('jquery'),
+          '', // script version, defaults to WP version
+          false // false puts it in footer
           );
     }
 
     function timer_action($atts) {
         $content = <<<EOS
 <span class='urgency-timer ut-large'>
-  <span class='ut-numbers ut-h'>03</span>  <span class=ut-letters>h</span>
-  <span class='ut-numbers ut-m'>02</span>  <span class=ut-letters>m</span>
-  <span class='ut-numbers ut-s'>01</span>  <span class=ut-letters>s</span>
+  <span class='ut-numbers ut-hh'>03</span>  <span class=ut-letters>h</span>
+  <span class='ut-numbers ut-mm'>02</span>  <span class=ut-letters>m</span>
+  <span class='ut-numbers ut-ss'>01</span>  <span class=ut-letters>s</span>
 </span>
 EOS;
         return $content;
@@ -58,9 +60,9 @@ EOS;
     function timer_small_action($atts) {
         $content = <<<EOS
 <span class='urgency-timer ut-small'>
-  <span class='ut-numbers ut-h'>03</span>  <span class=ut-letters>:</span>
-  <span class='ut-numbers ut-m'>02</span>  <span class=ut-letters>:</span>
-  <span class='ut-numbers ut-s'>01</span>
+  <span class='ut-numbers ut-hh'>03</span>  <span class=ut-letters>:</span>
+  <span class='ut-numbers ut-mm'>02</span>  <span class=ut-letters>:</span>
+  <span class='ut-numbers ut-ss'>01</span>
 </span>
 EOS;
         return $content;

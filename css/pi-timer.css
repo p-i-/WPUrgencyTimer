@@ -14,17 +14,26 @@
     font-size: 20px;
 }
 
-.ut-large > .ut-h,  .ut-large > .ut-m {
+.ut-large > .ut-hh,  .ut-large > .ut-mm {
     color: #a00;
     padding-top: 1px;
     font-size: 30px;
 }
 
-.ut-large > .ut-s {
-    color: #f00;
+.ut-large > .ut-ss {
     padding-top: 1px;
     font-size: 30px;
 }
+
+@keyframes pi-pulse {
+    0%   { color: #f00; }
+    100% { color: #a00; }
+}
+
+.pi-sync.ut-large > .ut-ss {
+    animation: pi-pulse 1s ease-out infinite;
+}
+
 
 /* SMALL */
 
@@ -38,14 +47,22 @@
     font-size: 20px;
 }
 
-.ut-small > .ut-h,  .ut-small > .ut-m {
+.ut-small > .ut-hh,  .ut-small > .ut-mm {
     color: #0a0;
     padding-top: 1px;
     font-size: 20px;
 }
 
-.ut-small > .ut-s {
-    color: #0f0;
+.ut-small > .ut-ss {
     padding-top: 1px;
     font-size: 20px;
+}
+
+@keyframes pi-pulse-sm {
+    from { color: #0f0; }
+    to   { color: #0a0; }
+}
+
+.pi-sync.ut-small > .ut-ss {
+    animation: pi-pulse-sm 1s ease-out infinite;
 }
