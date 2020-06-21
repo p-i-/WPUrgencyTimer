@@ -1,7 +1,9 @@
 // jQuery(document).ready(
 //     function ($) {
 
-debugMode = true;
+debugMode = false;
+
+var timout_hms = debugMode ? [0,0,10] : [7,0,0];
 
 class PiTimer
 {
@@ -11,7 +13,9 @@ class PiTimer
 
         this.deadline = localStorage.getItem('deadline');
         if( this.deadline === null || debugMode ) {
-            let h=0, m=0, s = 60;
+            let h = timout_hms[0];
+            let m = timout_hms[1];
+            let s = timout_hms[2];
             let ms = 1000 * (s + 60 * (m + 60*h) );
             
             this.deadline = new Date( this.now_ms() + ms );
