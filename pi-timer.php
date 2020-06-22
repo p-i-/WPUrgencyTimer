@@ -44,6 +44,7 @@ class TimerPlugin
 
     function timer_action($atts) {
         $content = <<<EOS
+
 <span class='urgency-timer ut-large'>
   <span class='ut-numbers ut-hh'>03</span>  <span class=ut-letters>h</span>
   <span class='ut-numbers ut-mm'>02</span>  <span class=ut-letters>m</span>
@@ -54,11 +55,9 @@ EOS;
     }
 
 
-
-
-
     function timer_small_action($atts) {
         $content = <<<EOS
+
 <span class='urgency-timer ut-small'>
   <span class='ut-numbers ut-hh'>03</span>  <span class=ut-letters>:</span>
   <span class='ut-numbers ut-mm'>02</span>  <span class=ut-letters>:</span>
