@@ -1,7 +1,7 @@
 // jQuery(document).ready(
 //     function ($) {
 
-debugMode = false;
+debugMode = true;
 
 var timout_hms = debugMode ? [0,0,10] : [7,0,0];
 
@@ -13,9 +13,7 @@ class PiTimer
 
         this.deadline = localStorage.getItem('deadline');
         if( this.deadline === null || debugMode ) {
-            let h = timout_hms[0];
-            let m = timout_hms[1];
-            let s = timout_hms[2];
+            let [h,m,s] = timout_hms;
             let ms = 1000 * (s + 60 * (m + 60*h) );
             
             this.deadline = new Date( this.now_ms() + ms );
@@ -25,16 +23,13 @@ class PiTimer
 
         this.showTimer = this.ms_until(this.deadline) > 0;
 
-        window.addEventListener('DOMContentLoaded', this.onReady.bind(this));
+        window.addEventListener('DOMContentLoaded', () => {
+            for ( let e of [...document.querySelectorAll('.urgency-timer')] )
+                e.classList.add("pi-sync");
+            this.tick();
+            this.timer = setInterval( this.tick.bind(this), 1000 );
+        });
     }
-
-    onReady() {
-        for ( let e of [...document.querySelectorAll('.urgency-timer')] )
-            e.classList.add("pi-sync");
-        this.tick();
-        this.timer = setInterval( this.tick.bind(this), 1000 );
-    }
-
 
     now_ms() {
         return +new Date(); // coerce to float
@@ -88,12 +83,7 @@ class PiTimer
             clearInterval( this.tick );
         
         for ( let elem of [...document.querySelectorAll('.urgency-timer')] )
-            elem.hidden = ! this.showTimer;
-       
-        // if( this.showTimer )
-        //     jQuery('.urgency-timer').show();
-        // else
-        //     jQuery('.urgency-timer').hide();
+            elem.hidden = ! this.showTimer;       
     }
 
     onUpdate(f)
@@ -105,11 +95,6 @@ class PiTimer
 
 window.piTimer = new PiTimer();
 
-// }); // jquery
-
-
-
-
 // if( timer_showTimer() ) 
 // {
 //     let text = timer_showTimer() ? "Start Training for $1" : "Start Training";
@@ -119,17 +104,3 @@ window.piTimer = new PiTimer();
 //     jQuery(".cta-bronze a").attr( 'href', 'http://foo.com' );
 //
 // }
-
-        /*
-        Works:
-            let widget = document.getElementById("clockdiv");
-            widget.style.display = this.showTimer ? 'inline' : 'none';
-
-        Fails:
-            let widget = $('clockdiv');
-            widget.css( 'display', this.showTimer ? 'inline' : 'none' );
-        
-        Alts:
-            document.getElementById("clockdiv");
-            jQuery("#clockdiv")[0];
-        */
