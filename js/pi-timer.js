@@ -9,7 +9,7 @@ class PiTimer
 {
     constructor()
     {
-        this.onUpdateEvent = null;
+        this.onUpdateHooks = [];
 
         this.deadline = localStorage.getItem('deadline');
         if( this.deadline === null || debugMode ) {
@@ -24,8 +24,8 @@ class PiTimer
         this.showTimer = this.ms_until(this.deadline) > 0;
 
         window.addEventListener('DOMContentLoaded', () => {
-            for ( let e of [...document.querySelectorAll('.urgency-timer')] )
-                e.classList.add("pi-sync");
+            for ( let e of [...document.querySelectorAll('.ut-ss, .ut-reduced-price')] )
+                e.classList.add("ut-sync");
             this.tick();
             this.timer = setInterval( this.tick.bind(this), 1000 );
         });
@@ -66,8 +66,10 @@ class PiTimer
 
         if( _showTimer != this.showTimer ) {
             this.showTimer = _showTimer;
-            if( this.onUpdateEvent !== null )
-                this.onUpdateEvent(this.showTimer);
+            // if( this.onUpdateEvent !== null )
+            //     this.onUpdateEvent(this.showTimer);
+            for( let hook of this.onUpdateHooks )
+                hook( this.showTimer );
         }    
 
         if( this.showTimer ) {
@@ -82,14 +84,22 @@ class PiTimer
         else
             clearInterval( this.tick );
         
-        for ( let elem of [...document.querySelectorAll('.urgency-timer')] )
-            elem.hidden = ! this.showTimer;       
+        for ( let el of [...document.querySelectorAll('.urgency-timer')] )
+            el.hidden = ! this.showTimer;
+
+        
+        for ( let el of [...document.querySelectorAll('.ut-no-discount')] )
+            el.hidden = this.showTimer;
+
+        for ( let el of [...document.querySelectorAll('.ut-priceslash-parent')] )
+            el.hidden = ! this.showTimer;
+
+        for ( let el of [...document.querySelectorAll('.ut-reduced-price')] )
+            el.hidden = ! this.showTimer;
     }
 
-    onUpdate(f)
-    {
-        this.onUpdateEvent = f;
-        f(this.showTimer);
+    registerOnUpdateHook(f) {
+        this.onUpdateHooks.push(f);
     }
 }
 
