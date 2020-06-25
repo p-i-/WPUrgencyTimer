@@ -22,7 +22,7 @@ class TimerPlugin
         add_shortcode('pi-timer'       , array($this, 'shortcode_timer'));
         add_shortcode('pi-timer-small' , array($this, 'shortcode_timer_small'));
         add_shortcode('ut-offer'       , array($this, 'shortcode_ut_offer'));
-        add_shortcode('ut-flip'        , array($this, 'shortcode_ut_flip'));
+        add_shortcode('ut-button'      , array($this, 'shortcode_ut_button'));
     }
 
     function enqueue_scripts_action()
@@ -89,21 +89,30 @@ class TimerPlugin
         return ob_get_clean();
     }
 
-    function shortcode_ut_flip($atts) {
-    //     $text_hidden = $atts['hidden'];
-    //     $text_visible = $atts['visible'];
+    // Usage:
+    //   [ut-button TextNormal normal.com TextOffer offer.com]
+    function shortcode_ut_button($atts) {
+        ob_start();
+        ?>
+        <script>
+        {
+            let parentNode = document.currentScript.parentNode;
 
-    //     ob_start();
-    //     ? >
-    //     <script>
-    //         window.addEventListener('DOMContentLoaded', () => {
-    //             window.piTimer.registerOnUpdateHook( is_vis => {
-    //                 document.write( "x" );
-    //             } );
-    //         }
-    //     </script>
-    //     <? php
-    //     return ob_get_clean();
+            window.piTimer.registerOnUpdateHook( is_vis => {
+                // std                              // offer
+                let txtA = "<?php echo $atts[0];?>";  let txtB = "<?php echo $atts[2];?>";
+                let urlA = "<?php echo $atts[1];?>";  let urlB = "<?php echo $atts[3];?>";
+
+                let txt = is_vis ? txtB : txtA;
+                let url = is_vis ? urlB : urlA;
+
+                parentNode.closest( 'span' ).textContent = txt;
+                parentNode.closest( 'a' ).href = url;
+            });
+        }
+        </script>
+        <?php
+        return ob_get_clean();
     }
 }
 

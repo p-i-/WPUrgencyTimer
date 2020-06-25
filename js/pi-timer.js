@@ -10,8 +10,10 @@ class PiTimer
     constructor()
     {
         this.onUpdateHooks = [];
+            console.log('ctor');
 
         this.deadline = localStorage.getItem('deadline');
+
         if( this.deadline === null || debugMode ) {
             let [h,m,s] = timout_hms;
             let ms = 1000 * (s + 60 * (m + 60*h) );
@@ -26,8 +28,11 @@ class PiTimer
         window.addEventListener('DOMContentLoaded', () => {
             for ( let e of [...document.querySelectorAll('.ut-ss, .ut-reduced-price')] )
                 e.classList.add("ut-sync");
+            
             this.tick();
             this.timer = setInterval( this.tick.bind(this), 1000 );
+
+            this.update();
         });
     }
 
@@ -58,6 +63,12 @@ class PiTimer
         };
     }                
 
+    update()
+    {
+        for( let hook of this.onUpdateHooks )
+            hook( this.showTimer );
+    }
+
     tick()
     {
         const ms = this.ms_until(this.deadline); // this.getTimeRemaining();
@@ -65,11 +76,8 @@ class PiTimer
         const _showTimer = (ms > 0);
 
         if( _showTimer != this.showTimer ) {
-            this.showTimer = _showTimer;
-            // if( this.onUpdateEvent !== null )
-            //     this.onUpdateEvent(this.showTimer);
-            for( let hook of this.onUpdateHooks )
-                hook( this.showTimer );
+            this.showTimer = _showTimer;            
+            this.update();
         }    
 
         if( this.showTimer ) {
