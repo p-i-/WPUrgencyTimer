@@ -1,16 +1,19 @@
-// jQuery(document).ready(
-//     function ($) {
-
-debugMode = true;
+let debugMode = true;
 
 var timout_hms = debugMode ? [0,0,10] : [7,0,0];
 
-class PiTimer
+
+function operateOnMatchingElements(match, f) 
+{ 
+    for ( let el of [...document.querySelectorAll(match)] )
+        f( el );
+}
+
+class UrgencyTimer
 {
     constructor()
     {
         this.onUpdateHooks = [];
-            console.log('ctor');
 
         this.deadline = localStorage.getItem('deadline');
 
@@ -26,8 +29,8 @@ class PiTimer
         this.showTimer = this.ms_until(this.deadline) > 0;
 
         window.addEventListener('DOMContentLoaded', () => {
-            for ( let e of [...document.querySelectorAll('.ut-ss, .ut-reduced-price')] )
-                e.classList.add("ut-sync");
+            // As we do the first tick, we start/sync all pulsing animations by adding ut-sync class
+            operateOnMatchingElements( '.ut-ss, .ut-reduced-price', el => el.classList.add("ut-sync") );
             
             this.tick();
             this.timer = setInterval( this.tick.bind(this), 1000 );
@@ -37,7 +40,7 @@ class PiTimer
     }
 
     now_ms() {
-        return +new Date(); // coerce to float
+        return +new Date();  // coerce to float
     }
 
     ms_until(date)
@@ -83,42 +86,26 @@ class PiTimer
         if( this.showTimer ) {
             const dhms = this.split_ms( ms );
 
-            for ( let e of [...document.querySelectorAll('.urgency-timer')] ) {
-                e.querySelector('.ut-hh').innerHTML = dhms.hh;
-                e.querySelector('.ut-mm').innerHTML = dhms.mm;
-                e.querySelector('.ut-ss').innerHTML = dhms.ss;
-            }
+            operateOnMatchingElements( '.urgency-timer', el => {
+                el.querySelector('.ut-hh').innerHTML = dhms.hh;
+                el.querySelector('.ut-mm').innerHTML = dhms.mm;
+                el.querySelector('.ut-ss').innerHTML = dhms.ss;
+            });
         }
         else
             clearInterval( this.tick );
         
-        for ( let el of [...document.querySelectorAll('.urgency-timer')] )
-            el.hidden = ! this.showTimer;
+        operateOnMatchingElements( '.urgency-timer, .ut-priceslash-parent, .ut-reduced-price',
+            el => el.hidden = ! this.showTimer );
 
-        
-        for ( let el of [...document.querySelectorAll('.ut-no-discount')] )
-            el.hidden = this.showTimer;
-
-        for ( let el of [...document.querySelectorAll('.ut-priceslash-parent')] )
-            el.hidden = ! this.showTimer;
-
-        for ( let el of [...document.querySelectorAll('.ut-reduced-price')] )
-            el.hidden = ! this.showTimer;
+        operateOnMatchingElements( '.ut-no-discount',
+            el => el.hidden = this.showTimer );
     }
 
-    registerOnUpdateHook(f) {
+    registerOnUpdateHook(f)
+    {
         this.onUpdateHooks.push(f);
     }
 }
 
-window.piTimer = new PiTimer();
-
-// if( timer_showTimer() ) 
-// {
-//     let text = timer_showTimer() ? "Start Training for $1" : "Start Training";
-//
-//     jQuery(".cta-bronze a .elementor-button-text").html( text );
-//   
-//     jQuery(".cta-bronze a").attr( 'href', 'http://foo.com' );
-//
-// }
+window.urgencyTimer = new UrgencyTimer();

@@ -1,9 +1,9 @@
 <?php
 
 /*
-    Plugin Name: pi-timer
-    # Plugin URI: https://github.com/p-i-/timer
-    Description: My timer plugin
+    Plugin Name: urgency-timer
+    # Plugin URI: https://github.com/p-i-/WPUrgencyTimer
+    Description: Urgency Countdown Timer
     Version: 1.0
     Author: Pi
  */
@@ -19,28 +19,20 @@ class TimerPlugin
     {
         add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts_action'));
 
-        add_shortcode('pi-timer'       , array($this, 'shortcode_timer'));
-        add_shortcode('pi-timer-small' , array($this, 'shortcode_timer_small'));
+        add_shortcode('ut-timer'       , array($this, 'shortcode_ut_timer'));
+        add_shortcode('ut-timer-small' , array($this, 'shortcode_ut_timer_small'));
         add_shortcode('ut-offer'       , array($this, 'shortcode_ut_offer'));
         add_shortcode('ut-button'      , array($this, 'shortcode_ut_button'));
     }
 
     function enqueue_scripts_action()
     {
-        wp_enqueue_style('pi-timer',
-                plugins_url('/css/pi-timer.css', __FILE__)); // path is relative to this file location
-
-        // General plugin scripts
-        wp_enqueue_script(
-          'pi-timer',
-          plugins_url('/js/pi-timer.js', __FILE__),
-          array('jquery'),
-          '', // script version, defaults to WP version
-          false // false puts it in footer
-          );
+        // path is relative to this file location
+        wp_enqueue_style('urgency-timer', plugins_url('/css/urgency-timer.css', __FILE__) );
+        wp_enqueue_script( 'urgency-timer', plugins_url('/js/urgency-timer.js', __FILE__) );
     }
 
-    function shortcode_timer($atts) {
+    function shortcode_ut_timer($atts) {
          ob_start();
         ?>
         <span class='urgency-timer ut-large'>
@@ -52,7 +44,7 @@ class TimerPlugin
         return ob_get_clean();
     }
 
-    function shortcode_timer_small($atts) {
+    function shortcode_ut_timer_small($atts) {
         ob_start();
         ?>
         <span class='urgency-timer ut-small'>
@@ -98,8 +90,16 @@ class TimerPlugin
         {
             let parentNode = document.currentScript.parentNode;
 
-            window.piTimer.registerOnUpdateHook( is_vis => {
-                // std                              // offer
+            /* This JS is executed before DOMContentLoaded event fires,
+               which will (see c'tor of timer) call update() which 
+               fires all registerOnUpdateHook listeners.
+
+               So YES we DO create the hook before the update event fires.
+               So the button DOES get updated upon page-load.
+             */
+
+            window.urgencyTimer.registerOnUpdateHook( is_vis => {
+                // std                                // offer
                 let txtA = "<?php echo $atts[0];?>";  let txtB = "<?php echo $atts[2];?>";
                 let urlA = "<?php echo $atts[1];?>";  let urlB = "<?php echo $atts[3];?>";
 
