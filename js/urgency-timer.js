@@ -3,7 +3,7 @@ let debugMode = true;
 var timout_hms = debugMode ? [0,0,10] : [7,0,0];
 
 
-function operateOnMatchingElements(match, f) 
+function forElementsMatching(match, f) 
 { 
     for ( let el of [...document.querySelectorAll(match)] )
         f( el );
@@ -30,7 +30,7 @@ class UrgencyTimer
 
         window.addEventListener('DOMContentLoaded', () => {
             // As we do the first tick, we start/sync all pulsing animations by adding ut-sync class
-            operateOnMatchingElements( '.ut-ss, .ut-reduced-price', el => el.classList.add("ut-sync") );
+            forElementsMatching( '.ut-ss, .ut-reduced-price', el => el.classList.add("ut-sync") );
             
             this.tick();
             this.timer = setInterval( this.tick.bind(this), 1000 );
@@ -86,7 +86,7 @@ class UrgencyTimer
         if( this.showTimer ) {
             const dhms = this.split_ms( ms );
 
-            operateOnMatchingElements( '.urgency-timer', el => {
+            forElementsMatching( '.urgency-timer', el => {
                 el.querySelector('.ut-hh').innerHTML = dhms.hh;
                 el.querySelector('.ut-mm').innerHTML = dhms.mm;
                 el.querySelector('.ut-ss').innerHTML = dhms.ss;
@@ -95,10 +95,10 @@ class UrgencyTimer
         else
             clearInterval( this.tick );
         
-        operateOnMatchingElements( '.urgency-timer, .ut-priceslash-parent, .ut-reduced-price',
+        forElementsMatching( '.urgency-timer, .ut-priceslash-parent, .ut-reduced-price',
             el => el.hidden = ! this.showTimer );
 
-        operateOnMatchingElements( '.ut-no-discount',
+        forElementsMatching( '.ut-no-discount',
             el => el.hidden = this.showTimer );
     }
 
