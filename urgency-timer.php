@@ -20,15 +20,21 @@ class TimerPlugin
         add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts_action'));
 
         add_shortcode('ut-timer'       , array($this, 'shortcode_ut_timer'));
+        add_shortcode('ut-offer'       , array($this, 'shortcode_ut_offer')); // price slash
+        add_shortcode('ut-url-flip'    , array($this, 'shortcode_ut_url_flip'));
+
+        // not used
         add_shortcode('ut-timer-small' , array($this, 'shortcode_ut_timer_small'));
-        add_shortcode('ut-offer'       , array($this, 'shortcode_ut_offer'));
         add_shortcode('ut-button'      , array($this, 'shortcode_ut_button'));
     }
 
     function enqueue_scripts_action()
     {
-        // path is relative to this file location
+        wp_enqueue_style('font-orbitron', 'https://fonts.googleapis.com/css2?family=Orbitron&display=swap' );
+
+        // path is relative to this file location        
         wp_enqueue_style('urgency-timer', plugins_url('/css/urgency-timer.css', __FILE__) );
+
         wp_enqueue_script( 'urgency-timer', plugins_url('/js/urgency-timer.js', __FILE__) );
     }
 
@@ -107,6 +113,35 @@ class TimerPlugin
                 let url = is_vis ? urlB : urlA;
 
                 parentNode.closest( 'span' ).textContent = txt;
+                parentNode.closest( 'a' ).href = url;
+            });
+        }
+        </script>
+        <?php
+        return ob_get_clean();
+    }
+
+    function shortcode_ut_url_flip($atts) {
+        ob_start();
+        ?>
+        <script>
+        {
+            let parentNode = document.currentScript.parentNode;
+
+            /* This JS is executed before DOMContentLoaded event fires,
+               which will (see c'tor of timer) call update() which 
+               fires all registerOnUpdateHook listeners.
+
+               So YES we DO create the hook before the update event fires.
+               So the button DOES get updated upon page-load.
+             */
+
+            window.urgencyTimer.registerOnUpdateHook( is_vis => {
+                let offer = "<?php echo $atts['offer']; ?>";
+                let normal = "<?php echo $atts['normal']; ?>";
+
+                let url = is_vis ? offer : normal;
+
                 parentNode.closest( 'a' ).href = url;
             });
         }

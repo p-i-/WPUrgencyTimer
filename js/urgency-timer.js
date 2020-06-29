@@ -1,6 +1,6 @@
 let debugMode = document.location.href.includes('localhost');
 
-var timout_hms = debugMode ? [0,0,10] : [7,0,0];
+var timout_hms = debugMode ? [0,0,20] : [7,0,0];
 
 
 function forElementsMatching(match, f) 
