@@ -28,7 +28,7 @@ class UrgencyTimer
 
         this.showTimer = this.ms_until(this.deadline) > 0;
 
-        window.addEventListener('DOMContentLoaded', () => {
+        window.addEventListener('load', () => { // DOMContentLoaded -> load
             // As we do the first tick, we start/sync all pulsing animations by adding ut-sync class
             forElementsMatching( '.ut-ss, .ut-reduced-price', el => el.classList.add("ut-sync") );
             
@@ -79,7 +79,7 @@ class UrgencyTimer
         const _showTimer = (ms > 0);
 
         if( _showTimer != this.showTimer ) {
-            this.showTimer = _showTimer;            
+            this.showTimer = _showTimer;
             this.update();
         }    
 
